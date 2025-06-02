@@ -28,6 +28,18 @@ void sendOver(char* data) {
     }
 }
 
+void read_send_data() {
+    double value = readValue(0);
+    uint16_t x_position = value / 5 * 1000;
+    value = readValue(1);
+    uint16_t y_position = value / 5 * 1000;
+
+    char sendResult[64];
+    sprintf(sendResult, "X:%d,Y:%d\n", x_position, y_position);
+    sendOver(sendResult);
+    _delay_ms(10);
+}
+
 
 int main() {
 
@@ -60,6 +72,11 @@ int main() {
     while (1) {
         // x is blue
         // y is white
+
+
+        read_send_data();
+        continue;
+
         lcd_clrscr();
         lcd_gotoxy(0,0);
         // lcd_puts("X");
@@ -75,10 +92,10 @@ int main() {
         uint16_t y_position = value / 5 * 1000;
         sprintf(buffer, "%d", y_position);
         // lcd_puts(buffer);
-        char sendResult[32];
+        char sendResult[64];
         sprintf(sendResult, "X:%d,Y:%d\n", x_position, y_position);
         sendOver(sendResult);
-        _delay_ms(100);
+        _delay_ms(200);
     }
     return 0;
 }

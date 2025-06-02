@@ -44,11 +44,11 @@ public class Program
 
         CancellationTokenSource tokenSource = new CancellationTokenSource();
         Task serialTask = Task.Run(() => serial.Start(tokenSource.Token), tokenSource.Token);
-        Console.WriteLine("Type 'quit' to exit:");
+        Console.WriteLine("Type 'q' to exit:");
         while (!serialTask.IsCompleted)
         {
-            var entry = Console.ReadLine();
-            if(entry == "quit")
+            var entry = Console.ReadKey();
+            if(entry.KeyChar == 'q')
                 tokenSource.Cancel();
         }
 

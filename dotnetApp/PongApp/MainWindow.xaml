@@ -4,9 +4,40 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PongApp"
+        xmlns:coordinates="clr-namespace:PongApp.Coordinates"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow"
+        Height="300"
+        Width="500">
+    <StackPanel>
+        <Button Click="RefreshConnection">Reset and Refresh</Button>
+        <ListBox ItemsSource="{Binding Ports}" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <RadioButton
+                        IsChecked="{Binding IsPortChecked}"
+                        Content="{Binding Name}"
+                        GroupName="PortsGroup"
+                    />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button Margin="0 0 0 20" Click="SubmitPort">Submit Port</Button>
 
-    </Grid>
+        <DockPanel HorizontalAlignment="Left">
+            <TextBlock Text="Current Status: "/>
+            <TextBlock Text="{Binding Status}"/>
+        </DockPanel>
+        <TextBlock>Position:</TextBlock>
+        <DockPanel HorizontalAlignment="Left">
+            <TextBlock>X Position:</TextBlock>
+            <TextBlock Text="{Binding Position.X}"/>
+        </DockPanel>
+        <DockPanel HorizontalAlignment="Left" Margin="0 0 0 20">
+            <TextBlock>Y Position:</TextBlock>
+            <TextBlock Text="{Binding Position.Y}"/>
+        </DockPanel>
+
+        <Button Click="ButtonBase_OnClick">View Joystick Grid - Mostly for debugging</Button>
+    </StackPanel>
 </Window>
