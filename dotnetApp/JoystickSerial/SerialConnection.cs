@@ -6,6 +6,7 @@ public class SerialConnection : IDisposable
 {
     public delegate void DataReceivedEventHandler(JoyStickPosition position);
     public delegate void SerialStatusChangedEventHandler(SerialStatus status);
+    public delegate void ErrorProcessingDataEventHandler(Exception e, string errorMessage = "");
 
     private SerialPort? SerialPort { get; set; }
 
@@ -22,6 +23,7 @@ public class SerialConnection : IDisposable
 
     public event DataReceivedEventHandler? OnDataReceived;
     public event SerialStatusChangedEventHandler? SerialStatusChanged;
+    public event ErrorProcessingDataEventHandler? OnErrorProcessingData;
 
 
     public void InitializePort(
@@ -61,36 +63,40 @@ public class SerialConnection : IDisposable
                 JoyStickPosition position;
                 try
                 {
-                     position = new JoyStickPosition(data);
+                    position = new JoyStickPosition(data);
                 } catch(ArgumentException e)
                 {
-                    Console.WriteLine($"Invalid data format: {e.Message}");
+                    OnErrorProcessingData?.Invoke(e, "Invalid data format received from serial port.");
+                    // Console.WriteLine($"Invalid data format: {e.Message}");
                     continue;
                 } catch(IndexOutOfRangeException e)
                 {
-                    Console.WriteLine($"Data parsing error: {e.Message}");
+                    OnErrorProcessingData?.Invoke(e, "Data parsing error: Index out of range.");
+                    // Console.WriteLine($"Data parsing error: {e.Message}");
                     continue;
                 }
                 OnDataReceived?.Invoke(position);
             }
             catch (TimeoutException e)
             {
-                Console.WriteLine("Timeout");
+                // Console.WriteLine("Timeout");
+                OnErrorProcessingData?.Invoke(e, "Timeout while reading from serial port.");
             }
             catch(Exception e)
             {
                 Status = SerialStatus.Error;
-                Console.WriteLine($"Error reading from serial port: {e.Message}");
+                OnErrorProcessingData?.Invoke(e, "Error reading from serial port.");
+                // Console.WriteLine($"Error reading from serial port: {e.Message}"); // For debugging purposes
                 break; // Exit the loop on error
             }
         }
         SerialPort.Close();
         Status = SerialStatus.PortClosed;
-        Console.WriteLine("Connection to Serial closed.");
+        // Console.WriteLine("Connection to Serial closed."); // For debugging purposes
 
     }
 
-    public void SetPortName(string portName) => SerialPort.PortName = portName;
+    // public void SetPortName(string portName) => SerialPort.PortName = portName;
 
     public string[] GetAllPorts() => SerialPort.GetPortNames();
 

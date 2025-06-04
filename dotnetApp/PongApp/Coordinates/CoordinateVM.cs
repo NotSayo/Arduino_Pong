@@ -65,13 +65,13 @@ public class CoordinateVM : INotifyPropertyChanged
 
     public void InitializeSerialConnection()
     {
-        if (_serialConnection != null)
-        {
+        if (_serialConnection is not null)
             _serialConnection.Dispose();
-        }
+
         _serialConnection = new SerialConnection();
         _serialConnection.OnDataReceived += ReceiveData;
         _serialConnection.SerialStatusChanged += (status) => Status = status;
+        _serialConnection.OnErrorProcessingData += (e, errorMessage) => Console.WriteLine($"Error: {errorMessage}\n{e.Message}");
     }
 
     public void GetAllPorts()
@@ -81,7 +81,7 @@ public class CoordinateVM : INotifyPropertyChanged
         Ports.Clear();
         foreach (var port in _serialConnection!.GetAllPorts())
             Ports.Add(new PortsClass { Name = port });
-        OnPropertyChanged(Ports.ToString());
+        OnPropertyChanged(nameof(Ports));
     }
 
     public void SubmitPort()
@@ -90,14 +90,15 @@ public class CoordinateVM : INotifyPropertyChanged
             InitializeSerialConnection();
         if (Ports.All(p => !p.IsPortChecked))
             return;
-        if(SerialTask != null && !SerialTask.IsCompleted)
+        if(SerialTask is not null )
         {
-            TokenSource?.Cancel();
-            TokenSource?.Dispose();
+            if(!SerialTask.IsCompleted)
+                TokenSource!.Cancel();
+            while (!SerialTask.IsCompleted) ;
+            SerialTask.Dispose();
             SerialTask = null;
         }
         var port = Ports.First(p => p.IsPortChecked);
-        Console.WriteLine(port.Name);
         _serialConnection!.InitializePort(port.Name, 9600, 8, Parity.None, StopBits.One);
         TokenSource = new CancellationTokenSource();
         SerialTask = Task.Run(() => _serialConnection.Start(TokenSource.Token), TokenSource.Token);
@@ -247,8 +248,6 @@ public class CoordinateVM : INotifyPropertyChanged
         int y = Random.Shared.Next(0, CanvasSize.Height);
 
         TargetPosition = new Vector(x - TargetSize.Width / 2, y - TargetSize.Height / 2);
-        Console.WriteLine($"Target spawned at: X: {TargetPosition.X}, Y: {TargetPosition.Y}");
-
         IsTargetSpawned = true;
     }
 
@@ -265,7 +264,6 @@ public class CoordinateVM : INotifyPropertyChanged
            _position.Y <= TargetPosition.Y + TargetSize.Height * _adjustment &&
            _position.Y >= TargetPosition.Y - TargetSize.Height * _adjustment)
         {
-            Console.WriteLine("Target hit!");
             IsTargetSpawned = false;
             SpawnTarget();
             Score++;
