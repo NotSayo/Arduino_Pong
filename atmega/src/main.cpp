@@ -37,7 +37,7 @@ void read_send_data() {
     char sendResult[64];
     sprintf(sendResult, "X:%d,Y:%d\n", x_position, y_position);
     sendOver(sendResult);
-    _delay_ms(10);
+    // _delay_ms(10);
 }
 
 

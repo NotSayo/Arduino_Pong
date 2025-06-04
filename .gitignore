@@ -10,3 +10,7 @@ riderModule.iml
 .clang_complete
 .gcc-flags.json
 .pio
+
+.user
+.sln.DotSettings.user
+*.user
