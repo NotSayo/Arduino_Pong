@@ -1,0 +1,48 @@
+﻿<Window x:Class="PongApp.Windows.Accuracy"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:PongApp.Windows"
+        mc:Ignorable="d"
+        Title="Coordinates"
+        Height="1000"
+        Width="1000">
+    <StackPanel>
+        <Button IsEnabled="{Binding IsGameStarted}" Content="Start Game" Click="Start_Game" Width="100" Height="30" Margin="10"/>
+        <DockPanel HorizontalAlignment="Left">
+            <TextBlock>X Position:</TextBlock>
+            <TextBlock FontWeight="Bold" Text="{Binding Position.X}"/>
+        </DockPanel>
+        <DockPanel HorizontalAlignment="Left">
+            <TextBlock>Y Position:</TextBlock>
+            <TextBlock FontWeight="Bold" Text="{Binding Position.Y}"/>
+        </DockPanel>
+        <DockPanel HorizontalAlignment="Left">
+            <TextBlock>Score: </TextBlock>
+            <TextBlock FontWeight="Bold" Text="{Binding Score}"/>
+        </DockPanel>
+        <DockPanel HorizontalAlignment="Left">
+            <TextBlock>TimeLeft: </TextBlock>
+            <TextBlock FontWeight="Bold" Text="{Binding TimeLeft}"/>
+        </DockPanel>
+
+        <Canvas Width="{Binding CanvasSize.Width}" Height="{Binding CanvasSize.Height}" Background="DimGray">
+            <Canvas.Resources>
+                <Style TargetType="Ellipse">
+                    <Setter Property="Fill" Value="Red"/>
+                    <Setter Property="Width" Value="{Binding PlayerSize.Width}"/>
+                    <Setter Property="Height" Value="{Binding PlayerSize.Height}"/>
+                </Style>
+                <Style TargetType="Rectangle">
+                    <Setter Property="Fill" Value="Black"/>
+                    <Setter Property="Width" Value="{Binding TargetSize.Width}"/>
+                    <Setter Property="Height" Value="{Binding TargetSize.Height}"/>
+                </Style>
+            </Canvas.Resources>
+            <Ellipse Canvas.Left="{Binding Position.X}" Canvas.Top="{Binding Position.Y}"/>
+            <Rectangle Visibility="{Binding CheckTargetVisibility}" Canvas.Left="{Binding TargetPosition.X}" Canvas.Top="{Binding TargetPosition.Y}"></Rectangle>
+        </Canvas>
+
+    </StackPanel>
+</Window>

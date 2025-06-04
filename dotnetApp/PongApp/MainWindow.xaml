@@ -39,5 +39,6 @@
         </DockPanel>
 
         <Button Click="ButtonBase_OnClick">View Joystick Grid - Mostly for debugging</Button>
+        <Button Click="ButonAccuracy_OnClick">Accuracy Test</Button>
     </StackPanel>
 </Window>

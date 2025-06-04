@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PongApp.Coordinates;
+using PongApp.Windows;
 
 namespace PongApp;
 
@@ -46,5 +47,11 @@ public partial class MainWindow : Window
     protected override void OnClosing(CancelEventArgs e)
     {
         base.OnClosing(e);
+    }
+
+    private void ButonAccuracy_OnClick(object sender, RoutedEventArgs e)
+    {
+        Windows.Accuracy accuracyWindow = new Accuracy(vm);
+        accuracyWindow.Show();
     }
 }

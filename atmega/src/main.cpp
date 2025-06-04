@@ -50,7 +50,7 @@ int main() {
     PORTC = 0x00; // pull-ups off
 
     // LCD
-    lcd_init(LCD_DISP_ON_CURSOR);
+    // lcd_init(LCD_DISP_ON_CURSOR);
 
     // ADC
 

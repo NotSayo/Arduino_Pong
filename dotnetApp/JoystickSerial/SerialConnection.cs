@@ -58,9 +58,6 @@ public class SerialConnection : IDisposable
             try
             {
                 string data = SerialPort.ReadLine();
-                // Console.WriteLine(message);
-                // string data = $"X:{500 + new Random().Next(-100, 100)},Y:{500 + new Random().Next(-100, 100)}";
-                // Console.WriteLine(data); // For testing purposes, replace with SerialPort.ReadLine() in real use#
                 JoyStickPosition position;
                 try
                 {
