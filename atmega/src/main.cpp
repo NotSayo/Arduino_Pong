@@ -46,9 +46,6 @@ int main() {
     DDRC &= ~((1 << PC0) | (1 << PC1));
     PORTC = 0x00; // pull-ups off
 
-    // LCD
-    // lcd_init(LCD_DISP_ON_CURSOR);
-
     // ADC
 
     ADMUX |= (1 << REFS0);
@@ -70,29 +67,7 @@ int main() {
         // x is blue
         // y is white
 
-
         read_send_data();
-        continue;
-
-        lcd_clrscr();
-        lcd_gotoxy(0,0);
-        // lcd_puts("X");
-        double value = readValue(0);
-        uint16_t x_position = value / 5 * 1000;
-        char buffer[16];
-        sprintf(buffer, "%d", x_position);
-        // lcd_puts(buffer);
-
-        lcd_gotoxy(0, 1);
-        // lcd_puts("Y");
-        value = readValue(1);
-        uint16_t y_position = value / 5 * 1000;
-        sprintf(buffer, "%d", y_position);
-        // lcd_puts(buffer);
-        char sendResult[64];
-        sprintf(sendResult, "X:%d,Y:%d\n", x_position, y_position);
-        sendOver(sendResult);
-        _delay_ms(200);
     }
     return 0;
 }
