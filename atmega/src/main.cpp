@@ -7,17 +7,14 @@
 #define USART_BAUDRATE 9600
 #define BAUD_PRESCALE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1)
 
-volatile uint8_t x = 0;
-volatile uint8_t y = 0;
 
 float readValue(uint8_t channel) {
     ADMUX = ((ADMUX & 0xF0) | (channel & 0x0F));
-    _delay_ms(20);
 
     ADCSRA |= (1 << ADSC);
     while (ADCSRA & (1 << ADSC));
     double val = ADCL | (ADCH << 8);
-    return (val * 5) / 1024;;
+    return (val * 5) / 1024;
 }
 
 void sendOver(char* data) {

@@ -19,6 +19,10 @@
             <TextBlock FontWeight="Bold" Text="{Binding Position.Y}"/>
         </DockPanel>
         <DockPanel HorizontalAlignment="Left">
+            <TextBlock>Speed:</TextBlock>
+            <TextBox Width="60" Text="{Binding Speed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsGameStarted}"/>
+        </DockPanel>
+        <DockPanel HorizontalAlignment="Left">
             <TextBlock>Score: </TextBlock>
             <TextBlock FontWeight="Bold" Text="{Binding Score}"/>
         </DockPanel>

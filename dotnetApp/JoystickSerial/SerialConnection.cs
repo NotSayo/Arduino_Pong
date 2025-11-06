@@ -59,11 +59,12 @@ public class SerialConnection : IDisposable
         {
             try
             {
-                string data = SerialPort.ReadLine();
+                    string data = SerialPort.ReadLine();
                 JoyStickPosition position;
                 try
                 {
                     position = new JoyStickPosition(data);
+                    Console.WriteLine(position.ToString());
                 } catch(ArgumentException e)
                 {
                     OnErrorProcessingData?.Invoke(e, "Invalid data format received from serial port.");

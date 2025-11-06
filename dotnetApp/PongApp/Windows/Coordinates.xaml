@@ -17,6 +17,10 @@
             <TextBlock>Y Position:</TextBlock>
             <TextBlock Text="{Binding Position.Y}"/>
         </DockPanel>
+        <DockPanel HorizontalAlignment="Left">
+            <TextBlock>Speed:</TextBlock>
+            <TextBox Width="60" Text="{Binding Speed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </DockPanel>
 
         <Canvas Width="{Binding CanvasSize.Width}" Height="{Binding CanvasSize.Height}" Background="DimGray">
             <Canvas.Resources>

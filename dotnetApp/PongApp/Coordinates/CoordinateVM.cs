@@ -2,6 +2,7 @@
 using System.IO.Ports;
 using System.Windows;
 using JoystickSerial;
+using PongApp.Movement;
 
 namespace PongApp.Coordinates;
 
@@ -50,11 +51,15 @@ public class CoordinateVM : INotifyPropertyChanged
         }
     }
 
+    public IMovement Movement { get; set; } = new SetPosition();
+
     public CoordinateVM()
     {
         InitializeSerialConnection();
         GetAllPorts();
+        Movement.Speed = Speed;
     }
+
 
     public JoyStickPosition AdjustPosition(JoyStickPosition position)
     {
@@ -106,7 +111,8 @@ public class CoordinateVM : INotifyPropertyChanged
 
     private void ReceiveData(JoyStickPosition position)
     {
-        Position = AdjustPosition(position);
+        var newPosition = Movement.CalculatePosition(position);
+        Position = AdjustPosition(newPosition);
         // Console.WriteLine($"X: {position.X}, Y: {position.Y}"); // For debugging purposes
     }
 
@@ -183,7 +189,7 @@ public class CoordinateVM : INotifyPropertyChanged
             OnPropertyChanged(nameof(TimeLeft));
         }
     }
-    private readonly int _availableTime = 20;
+    private readonly int _availableTime = 120;
     private readonly double _adjustment = 1;
 
     private Timer? Timer { get; set; }
@@ -271,4 +277,16 @@ public class CoordinateVM : INotifyPropertyChanged
     }
 
     #endregion
+
+    private double _speed = 5;
+    public double Speed
+    {
+        get => _speed;
+        set
+        {
+            _speed = value;
+            Movement.Speed = _speed;
+            OnPropertyChanged(nameof(Speed));
+        }
+    }
 }
